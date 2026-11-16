@@ -1,0 +1,18 @@
+cat > ../.gitignore <<'EOF'
+# Ambientes virtuais
+venv/
+.venv/
+
+# Arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Bancos de dados locais
+*.db
+*.sqlite
+*.sqlite3
+
+# Configurações locais
+.env
+.vscode/
+EOF
