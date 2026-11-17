@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from datetime import date, time
 
 
@@ -14,3 +14,5 @@ class EventoEntrada(BaseModel):
 
 class Evento(EventoEntrada):
     id: int
+
+    model_config = ConfigDict(from_attributes=True)
