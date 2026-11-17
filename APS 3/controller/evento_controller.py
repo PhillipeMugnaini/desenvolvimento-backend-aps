@@ -7,7 +7,8 @@ from service.evento_service import (
     listar_eventos,
     buscar_evento_por_id,
     atualizar_evento,
-    excluir_evento
+    excluir_evento,
+    CapacidadeInsuficienteError
 )
 
 
@@ -41,15 +42,20 @@ def obter_evento(
 
     return evento
 
-
-
 @router.put("/eventos/{evento_id}", response_model=Evento)
 def editar_evento(
     evento_id: int,
     dados: EventoEntrada,
     db: Session = Depends(get_db)
 ):
-    evento = atualizar_evento(evento_id, dados, db)
+    try:
+        evento = atualizar_evento(evento_id, dados, db)
+
+    except CapacidadeInsuficienteError:
+        raise HTTPException(
+            status_code=409,
+            detail="A capacidade não pode ser menor que o número de inscritos."
+        )
 
     if evento is None:
         raise HTTPException(
@@ -58,6 +64,7 @@ def editar_evento(
         )
 
     return evento
+
 
 
 @router.delete("/eventos/{evento_id}", status_code=204)
