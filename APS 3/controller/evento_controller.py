@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from model.evento import Evento, EventoEntrada
+from schema.evento_schema import Evento, EventoEntrada
 from service.evento_service import (
     cadastrar_evento,
     listar_eventos,

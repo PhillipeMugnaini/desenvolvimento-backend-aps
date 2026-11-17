@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from model.participante import Participante, ParticipanteEntrada
+from schema.participante_schema import Participante, ParticipanteEntrada
 from service.participante_service import (
     cadastrar_participante,
     listar_participantes,

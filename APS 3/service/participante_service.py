@@ -1,5 +1,4 @@
-from model.participante import Participante, ParticipanteEntrada
-
+from schema.participante_schema import Participante, ParticipanteEntrada
 
 participantes = []
 

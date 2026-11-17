@@ -1,4 +1,4 @@
-from model.evento import Evento, EventoEntrada
+from schema.evento_schema import Evento, EventoEntrada
 
 
 eventos = []
