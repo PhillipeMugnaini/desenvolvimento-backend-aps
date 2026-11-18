@@ -1,17 +1,23 @@
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+
 from database import get_db
+from security.dependencies import exigir_administrador
+
 from service.relatorio_service import (
     relatorio_ocupacao,
     relatorio_categorias,
     relatorio_cursos
 )
 
+
 router = APIRouter(
     prefix="/relatorios",
-    tags=["Relatórios"]
+    tags=["Relatórios"],
+    dependencies=[Depends(exigir_administrador)]
 )
+
 
 @router.get("/eventos/ocupacao")
 def obter_relatorio_ocupacao(
@@ -19,11 +25,13 @@ def obter_relatorio_ocupacao(
 ):
     return relatorio_ocupacao(db)
 
+
 @router.get("/eventos/categorias")
 def obter_relatorio_categorias(
     db: Session = Depends(get_db)
 ):
     return relatorio_categorias(db)
+
 
 @router.get("/participantes/cursos")
 def obter_relatorio_cursos(

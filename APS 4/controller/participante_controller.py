@@ -13,12 +13,19 @@ from service.participante_service import (
     EmailDuplicadoError
 )
 
+from security.dependencies import (
+    obter_usuario_atual,
+    exigir_administrador
+)
 
 router = APIRouter()
 
-
-
-@router.post("/participantes", response_model=Participante, status_code=201)
+@router.post(
+    "/participantes",
+    response_model=Participante,
+    status_code=201,
+    dependencies=[Depends(exigir_administrador)]
+)
 def criar_participante(
     dados: ParticipanteEntrada,
     db: Session = Depends(get_db)
@@ -34,13 +41,21 @@ def criar_participante(
     return participante
 
 
-@router.get("/participantes", response_model=list[Participante])
+@router.get(
+    "/participantes",
+    response_model=list[Participante],
+    dependencies=[Depends(obter_usuario_atual)]
+)
 def obter_participantes(
     db: Session = Depends(get_db)
 ):
     return listar_participantes(db)
 
-@router.get("/participantes/{participante_id}", response_model=Participante)
+@router.get(
+    "/participantes/{participante_id}",
+    response_model=Participante,
+    dependencies=[Depends(obter_usuario_atual)]
+)
 def obter_participante(
     participante_id: int,
     db: Session = Depends(get_db)
@@ -56,7 +71,11 @@ def obter_participante(
     return participante
 
 
-@router.put("/participantes/{participante_id}", response_model=Participante)
+@router.put(
+    "/participantes/{participante_id}",
+    response_model=Participante,
+    dependencies=[Depends(exigir_administrador)]
+)
 def editar_participante(
     participante_id: int,
     dados: ParticipanteEntrada,
@@ -82,7 +101,11 @@ def editar_participante(
     return participante
 
 
-@router.delete("/participantes/{participante_id}", status_code=204)
+@router.delete(
+    "/participantes/{participante_id}",
+    status_code=204,
+    dependencies=[Depends(exigir_administrador)]
+)
 def remover_participante(
     participante_id: int,
     db: Session = Depends(get_db)

@@ -8,16 +8,22 @@ from service.inscricao_service import (
     inscrever_participante,
     listar_inscritos
 )
+from security.dependencies import (
+    obter_usuario_atual,
+    exigir_administrador
+)
 
 
 router = APIRouter()
 
 
 
+
 @router.post(
     "/eventos/{evento_id}/inscricoes/{participante_id}",
     response_model=InscricaoSaida,
-    status_code=201
+    status_code=201,
+    dependencies=[Depends(obter_usuario_atual)]
 )
 def criar_inscricao(
     evento_id: int,
@@ -58,11 +64,10 @@ def criar_inscricao(
 
     return resultado
 
-
-
 @router.get(
     "/eventos/{evento_id}/inscricoes",
-    response_model=list[ParticipanteSaida]
+    response_model=list[ParticipanteSaida],
+    dependencies=[Depends(exigir_administrador)]
 )
 def obter_inscritos(
     evento_id: int,
