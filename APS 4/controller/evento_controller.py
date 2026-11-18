@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
+from security.dependencies import exigir_administrador
 from schema.evento_schema import Evento, EventoEntrada
 from sqlalchemy.orm import Session
 from database import get_db
@@ -15,7 +16,13 @@ from service.evento_service import (
 router = APIRouter()
 
 
-@router.post("/eventos", response_model=Evento, status_code=201)
+
+@router.post(
+    "/eventos",
+    response_model=Evento,
+    status_code=201,
+    dependencies=[Depends(exigir_administrador)]
+)
 def criar_evento(
     dados: EventoEntrada,
     db: Session = Depends(get_db)
@@ -42,7 +49,11 @@ def obter_evento(
 
     return evento
 
-@router.put("/eventos/{evento_id}", response_model=Evento)
+@router.put(
+    "/eventos/{evento_id}",
+    response_model=Evento,
+    dependencies=[Depends(exigir_administrador)]
+)
 def editar_evento(
     evento_id: int,
     dados: EventoEntrada,
@@ -67,7 +78,12 @@ def editar_evento(
 
 
 
-@router.delete("/eventos/{evento_id}", status_code=204)
+
+@router.delete(
+    "/eventos/{evento_id}",
+    status_code=204,
+    dependencies=[Depends(exigir_administrador)]
+)
 def remover_evento(
     evento_id: int,
     db: Session = Depends(get_db)
